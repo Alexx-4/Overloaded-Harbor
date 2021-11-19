@@ -18,7 +18,8 @@ Clase principal donde se desarrolla la simulacion
 '''
 class Harbor:
     '''
-    Inicia con un tiempo de simulacion a partir del cual ya no entrara ningun otro tanquero
+    Inicia con un tiempo de simulacion a partir del cual ya no entrara ningun otro tanquero pero atiende
+    a aquellos tanqueros en espera.
     Tambien podemos modificar el numero de muelles en la simulacion (por defecto 3)
     '''
     def __init__(self, simulation_time, docks = 3):
