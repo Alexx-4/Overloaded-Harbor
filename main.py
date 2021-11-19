@@ -19,7 +19,7 @@ print('''
 
 while True:
     try:
-        simulation_time = int(input("\n\n\n\nEnter simulation time in minutes --->  "))
+        simulation_time = int(input("\n\n\n\nEnter limit time in minutes --->  "))
 
         docks = input("Enter number of docks (*optional*) --->  ")
         if docks: docks = int(docks)
@@ -29,7 +29,7 @@ while True:
 
         print('\n\n')
 
-    except: 
+    except:
         print("\n\n***Please enter valid values.***\n\n") 
         continue
     
@@ -37,4 +37,8 @@ while True:
         harbor = Harbor(simulation_time, docks) if docks else Harbor(simulation_time)
         harbor.run_simulation()
     
-    if input("Press enter to continue or type command 'exit'.   > ") == 'exit': break
+    _input = ''
+    while _input != 'exit':
+        _input = input("Press enter to continue or type command 'exit'.   > ")
+        if _input == '': break
+    else: break
