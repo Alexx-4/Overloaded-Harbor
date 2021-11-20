@@ -23,7 +23,7 @@ class Harbor:
     Tambien podemos modificar el numero de muelles en la simulacion (por defecto 3)
     '''
     def __init__(self, simulation_time, docks = 3):
-        self.simulation_time = simulation_time
+        self.simulation_time = simulation_time * 60
         self.docks = docks
         self.free_docks = docks
 
