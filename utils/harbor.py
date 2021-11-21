@@ -136,7 +136,7 @@ class Harbor:
             self.free_docks += 1
             self.tug = Location.MOVING
 
-            tanker.current_time = self.time + exponential(2) * 60
+            tanker.current_time = self.time + exponential(1) * 60
             tanker.Event = self.departure
             tanker.order_join(self.pending_tankers)
 
