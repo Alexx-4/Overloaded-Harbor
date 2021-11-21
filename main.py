@@ -22,7 +22,7 @@ def main():
 
     while True:
         try:
-            simulation_time = int(input("\n\n\n\nEnter limit time in hours --->  "))
+            simulation_time = float(input("\n\n\n\nEnter limit time in hours --->  "))
 
             docks = input("Enter number of docks (*optional*) --->  ")
             if docks: docks = int(docks)

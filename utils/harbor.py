@@ -178,8 +178,8 @@ class Harbor:
     Calcula la media del tiempo de los tanqueros en el puerto
     '''
     def mean(self):
-        _mean = sum(self.tankers_time) / len(self.tankers_time)
+        _mean = sum(self.tankers_time) / len(self.tankers_time) if self.tankers_time else 0
         print(f'\nMean of tankers time in harbor: {_mean} hours aprox.')
         print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n\n')
-        
+
         return _mean
