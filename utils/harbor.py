@@ -63,7 +63,7 @@ class Harbor:
         self.time = tanker.arrival_time
         tanker.Event = self.move_to_dock
         self.next_arrival()
-        print(f'Tanker {tanker.id} is arriving to the port.     Time: {self.time}')
+        print(f'Tanker {tanker.id} is arriving to the port.     Time: {self.time} min')
 
         return True
 
@@ -80,7 +80,7 @@ class Harbor:
             tanker.Event = self.load
             tanker.order_join(self.pending_tankers)
 
-            print(f'Moving tanker {tanker.id} to a dock.     Time: {self.time}')
+            print(f'Moving tanker {tanker.id} to a dock.     Time: {self.time} min')
             return True
         return False
 
@@ -93,7 +93,7 @@ class Harbor:
             self.time += exponential(15)
             self.tug = Location(1 - location.value)
 
-            print(f'Moving tug to {location.name}.     Time: {self.time}')
+            print(f'Moving tug to {location.name}.     Time: {self.time} min')
     
 
     '''
@@ -109,7 +109,7 @@ class Harbor:
         tanker.Event = self.ready
         tanker.order_join(self.pending_tankers)
 
-        print(f'Tanker {tanker.id} arrived to a dock. Loading...     Time: {self.time}')
+        print(f'Tanker {tanker.id} arrived to a dock. Loading...     Time: {self.time} min')
         return True
     
 
@@ -122,7 +122,7 @@ class Harbor:
         tanker.Event = self.move_to_port
         tanker.order_join(self.pending_tankers)
 
-        print(f'Tanker {tanker.id} already finished loading. Its ready to go to the port.     Time: {self.time}')
+        print(f'Tanker {tanker.id} already finished loading. Its ready to go to the port.     Time: {self.time} min')
         return True
     
 
@@ -140,7 +140,7 @@ class Harbor:
             tanker.Event = self.departure
             tanker.order_join(self.pending_tankers)
 
-            print(f'Moving tanker {tanker.id} to the port.     Time: {self.time}')
+            print(f'Moving tanker {tanker.id} to the port.     Time: {self.time} min')
             return True
         return False
     
@@ -155,7 +155,7 @@ class Harbor:
 
         self.pending_tankers.remove(tanker)
 
-        print(f'Tanker {tanker.id} is leaving the harbor.     Time: {self.time}')
+        print(f'Tanker {tanker.id} is leaving the harbor.     Time: {self.time} min')
         return True
     
 
@@ -171,7 +171,7 @@ class Harbor:
             
         print(f'\n\n\nSimulation finished.   Duration: {self.time / 60} hours.   Tankers served: {len(self.tankers_time)}')
 
-        self.mean()
+        return ( self.mean(), len(self.tankers_time), self.time / 60 )
 
 
     '''
@@ -181,3 +181,5 @@ class Harbor:
         _mean = sum(self.tankers_time) / len(self.tankers_time)
         print(f'\nMean of tankers time in harbor: {_mean} hours aprox.')
         print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n\n')
+        
+        return _mean
