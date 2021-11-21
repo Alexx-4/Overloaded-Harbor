@@ -89,8 +89,10 @@ class Tanker:
 
 
     '''
-    Define el operador > para comparar una clase tanker con otra
-    atendiendo al tiempo que cada tanquero lleva en la simulacion
+    Define el operador > para comparar una clase tanker con otra atendiendo al tiempo que cada 
+    tanquero lleva en la simulacion. Si este tiempo es el mismo es mayor (tiene menos precedencia) 
+    aquel tanquero cuyo tiempo de llegada es mayor (lleva menos tiempo en el sistema) 
     '''
     def __gt__(self, other_tanker):
-        return self.current_time > other_tanker.current_time
+        return self.arrival_time > other_tanker.arrival_time if self.current_time == other_tanker.current_time \
+            else self.current_time > other_tanker.current_time

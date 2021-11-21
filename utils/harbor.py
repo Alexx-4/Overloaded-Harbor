@@ -24,7 +24,6 @@ class Harbor:
     '''
     def __init__(self, simulation_time, docks = 3):
         self.simulation_time = simulation_time * 60
-        self.docks = docks
         self.free_docks = docks
 
         # en la primera lista se guardaran los tanqueros que estan en
@@ -45,8 +44,8 @@ class Harbor:
     el tiempo limite
     '''
     def next_arrival(self):
-        if self.time <= self.simulation_time:
-            time = exponential(8) * 60 + self.time
+        time = exponential(8) * 60 + self.time
+        if time <= self.simulation_time:
             self.count += 1
             tanker = Tanker(self.count, time, self.arrival)
 
@@ -164,6 +163,7 @@ class Harbor:
     Metodo que inicia la simulacion
     '''
     def run_simulation(self):
+        print('Starting a new simulation....\n')
         self.next_arrival()
 
         while self.pending_tankers:

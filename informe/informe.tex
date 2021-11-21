@@ -1,0 +1,145 @@
+\documentclass[twoside]{article}
+
+\usepackage{lipsum}
+\usepackage[none]{hyphenat} 
+
+\usepackage[sc]{mathpazo} 
+\usepackage[T1]{fontenc} 
+\linespread{1.05}
+\usepackage{microtype}
+
+\usepackage[hmarginratio=1:1,top=32mm,columnsep=20pt]{geometry}
+\usepackage{multicol} 
+\usepackage[hang, small,labelfont=bf,up,textfont=it,up]{caption} 
+\usepackage{booktabs} 
+\usepackage{float} 
+\usepackage[hidelinks]{hyperref} 
+\usepackage[usenames]{color}
+
+\usepackage{lettrine} 
+\usepackage{paralist}
+
+\usepackage{abstract} 
+\renewcommand{\abstractnamefont}{\normalfont\bfseries}
+\renewcommand{\abstracttextfont}{\normalfont\small\itshape} 
+
+\usepackage{titlesec} 
+\renewcommand\thesection{\Roman{section}} 
+\renewcommand\thesubsection{\Roman{subsection}} 
+\titleformat{\section}[block]{\large\scshape\centering}{\thesection.}{1em}{} 
+\titleformat{\subsection}[block]{\large}{\thesubsection.}{1em}{}
+
+\usepackage{fancyhdr} 
+\pagestyle{fancy} 
+\fancyhead{} 
+\fancyfoot{}
+
+\fancyhead[C]{ Simulaci\'on $\bullet$ Eventos Discretos $\bullet$ Overloaded Harbor}
+\fancyfoot[RO,LE]{\thepage}
+
+\title{\vspace{-15mm}\fontsize{20pt}{10pt}\selectfont\textbf{Proyecto Eventos Discretos}}
+
+\author{
+\large
+\textbf{\large Overloaded Harbor} \\[1.5cm]
+\textsc{Alejandro Campos. C-411}\\\\[2mm]
+\normalsize Facultad de Matem\'atica y Computaci\'on \\
+\normalsize Universidad de la Habana \\
+\normalsize 2021 \\[2cm]
+\vspace{-5mm}
+}
+\date{}
+
+
+\usepackage{graphicx}
+\begin{document}
+
+\maketitle
+
+\thispagestyle{fancy} 
+
+\section{Introducci\'on}
+
+La simulaci\'on por eventos discretos es una t\'ecnica de modelado din\'amico de sistemas. Esta se caracteriza por un control en la variable del tiempo que permite avanzar a este a intervalos variables, en funci\'on de la planificaci\'on de ocurrencia de tales eventos a un tiempo futuro. Un requisito para aplicar esta t\'ecnica es que las variables que definen el sistema no cambien su comportamiento durante el intervalo simulado.
+
+El problema de eventos discretos seleccionado para su resoluci\'on es Overloaded Harbor, cuya orden se detalla a continuaci\'on:\\
+
+En un puerto de supertanqueros que cuenta con 3 muelles y un remolcador
+para la descarga de estos barcos de manera simult\'anea se desea conocer el tiempo
+promedio de espera de los barcos para ser cargados en el puerto.
+
+El puerto cuenta con un bote remolcador disponible para asistir a los tanqueros.
+Los tanqueros de cualquier tama\~no necesitan de un remolcador para
+aproximarse al muelle desde el puerto y para dejar el muelle de vuelta al puerto.
+
+El tiempo de intervalo de arribo de cada barco distribuye mediante una funci\'on exponencial con $\lambda$ = 8 horas. Existen tres tama\~nos distintos de tanqueros:
+peque\~no, mediano y grande, la probabilidad correspondiente al tama\~no de cada
+tanquero se describe en la tabla siguiente. El tiempo de carga de cada tanquero
+depende de su tama\~no y los par\'ametros de distribuci\'on normal que lo representa
+tambi\'en se describen en la tabla siguiente.\\
+
+\begin{tabular}{c c c}
+Tama\~no & Probabilidad de Arribo & Tiempo de Carga \\ \hline
+Peque\~no & $0.25$ & $\mu = 9, \sigma^2 = 1$ \\
+Mediano & $0.25$ & $\mu = 12, \sigma^2 = 2$ \\
+Grande & $0.5$  & $\mu = 18, \sigma^2 = 3$ \\\\
+\end{tabular}
+
+De manera general, cuando un tanquero llega al puerto, espera en una cola
+(virtual) hasta que exista un muelle vac\'io y que un remolcador est\'e disponible
+para atenderle. Cuando el remolcador est\'a disponible lo asiste para que pueda
+comenzar su carga, este proceso demora un tiempo que distribuye exponencial
+con $\lambda$ = 2 horas. El proceso de carga comienza inmediatamente despu\'es de que
+el barco llega al muelle. Una vez terminado este proceso es necesaria la asistencia
+del remolcador (esperando hasta que est\'e disponible) para llevarlo de vuelta al
+puerto, el tiempo de esta operaci\'on distribuye de manera exponencial con $\lambda$ = 1
+hora. El traslado entre el puerto y un muelle por el remolcador sin tanquero
+distribuye exponencial con $\lambda$ = 15 minutos.
+
+Cuando el remolcador termina la operaci\'on de aproximar un tanquero al
+muelle, entonces lleva al puerto al primer barco que esperaba por salir, en caso de
+que no exista barco por salir y alg\'un muelle est\'e vac\'io, entonces el remolcador se
+dirige hacia el puerto para llevar al primer barco en espera hacia el muelle vac\'io;
+en caso de que no espere ning\'un barco, entonces el remolcador esperar\'a por alg\'un barco en un muelle para llevarlo al puerto. Cuando el remolcador termina
+la operaci\'on de llevar alg\'un barco al puerto, este inmediatamente lleva al primer
+barco esperando hacia el muelle vac\'io. En caso de que no haya barcos en los
+muelles, ni barcos en espera para ir al muelle, entonces el remolcador se queda
+en el puerto esperando por alg\'un barco para llevar a un muelle.
+
+Simule completamente el funcionamiento del puerto. Determine el tiempo
+promedio de espera en los muelles. \\\\
+
+El objetivo de este informe es explicar el m\'etodo de resoluci\'on utilizado para resolver el problema anterior, cuya implementaci\'on se encuentra este \href{https://github.com/Alexx-4/Overloaded-Harbor.git}{\textcolor{red}{\underline{enlace}}}. Adem\'as abordaremos el modelo de eventos discretos utilizado y como se adapt\'o a este problema en particular. Por \'ultimo, haremos un an\'alisis de los resultados obtenidos a partir de la ejecuci\'on de las simulaciones del problema.\\\\
+
+\section{Ideas principales para la soluci\'on del problema}
+Para tratar este problema se siguieron las indicaciones de conferencia y del libro "Temas de simulaci\'on", cap\'itulo 3. Estos indican, en forma de resumen, que los elementos b\'asicos de una simulaci\'on basada en eventos discretos son las variables y los eventos. Luego cuando ocurra un evento los valores de las variables se actualizan y se genera el tiempo de ocurrencia del pr\'oximo evento. Posteriormente se selecciona para ejecutar el evento cuyo tiempo sea el menor.\\
+
+En el caso de este problema, cuando un tanquero arriba al puerto se genera el tiempo del pr\'oximo arribo y se inserta en la lista de espera para ser movido a un muelle. Esta lista est\'a ordenada por el tiempo en que el tanquero ejecutar\'a su pr\'oximo evento, el siguiente evento a ejecutar ser\'a aquel cuyo tiempo sea menor y se pueda ejecutar seg\'un las condiciones del problema, ya que cada tanquero para moverse debe esperar por que el remolcador est\'e disponible, y que haya alg\'un muelle vac\'io, en caso de que el tanquero est\'e en el puerto. La forma de escoger el siguiente evento a procesar evita que un barco espere m\'as del tiempo que debe\'ia y evita, adem\'as, que un barco se quede esperando eternamente. Una vez que se pueda trasladar el barco hacia un muelle, se genera el tiempo del pr\'oximo evento, que ser\'ia la llegada del tanquero al muelle y comenzar la carga. De esta forma cada evento determina el tiempo del siguiente hasta que el tanquero abandona la simulaci\'on, guardando el tiempo de estancia desde su llegada hasta su partida antes de partir. Se tienen entonces los siguientes eventos a simular:
+\begin{enumerate}
+\item Llegada de un tanquero al puerto.
+\item Traslado de un tanquero a un muelle si hay alguno disponible y el remolcador no est\'a ocupado.
+\item Llegada de un tanquero al muelle e inicio de la carga.
+\item Momento en que un tanquero termino de cargar y est\'a listo para regresar al puerto cuando el remolcador est\'e disponible.
+\item Traslado de un tanquero del muelle al puerto.
+\item Llegada del tanquero al puerto y partida de este.
+\end{enumerate}
+
+Podemos mencionar, adem\'as, como evento adicional pero no correspondiente a los tanqueros, el movimiento del remolcador vac\'io hacia o desde los muelles en caso de que no hayan barcos esperando en el lugar donde se encuentra.\\
+
+Por otro lado, debemos tener en cuenta a lo largo de la simulaci\'on: el tiempo general de esta, el tiempo de arribo y de partida de cada tanquero y el tiempo del pr\'oximo evento de este, constituyendo estas nuestras variables de tiempo. Las variables de estado, que describen el estado del puerto en el tiempo $t$, ser\'ian la localizaci\'on del remolcador (en el puerto, en el muelle o en movimiento) y la cantidad de muelles libres. Por \'ultimo la cantidad de arribos y la lista de los tiempos que los tanqueros han estado en el puerto constituyen nuestras variables contadoras.
+
+Las variables anteriores constituyen la base de la simulaci\'on implementada, su uso concreto en el c\'odigo se ver\'a con mejor detalle en la secci\'on IV del presente informe.\\\\
+
+
+\section{Modelo de Simulaci\'on de Eventos Discretos}
+Para simular el problema se us\'o como base el modelo de eventos discretos de $n$ servidores en paralelo, o sea, cuando llega un cliente, si hay un servidor vac\'io se atiende a este, si todos est\'an llenos, se pone en la cola a esperar que uno se vac\'ie. En este problema los clientes ser\'ian los tanqueros y los servidores los muelles.
+
+En el caso de este problema los clientes deben ser desplazados, por orden de llegada, a los servidores. Esta operaci\'on debe realizarse de uno en uno, puesto que solo se cuenta con un remolcador. Los clientes son atendidos por los servidores y posteriormente deben ser trasladados, tambi\'en de uno en uno, hacia la salida. Solo puede existir a lo sumo un cliente desplazandose en el mismo intervalo de tiempo. El orden en que son desplazados a la salida depende del tiempo que demoren en llegar al servidor y que demore el servidor en atenderlos (cargando el tanquero).  
+
+La estancia de cada cliente en el sistema se calcula como la diferenca entre el tiempo de salida y el de llegada. Una vez concluida la simulaci\'on, la media del tiempo de todos los barcos ser\'ia la suma de sus tiempos dividido entre la cantidad de clientes que atendi\'o el sistema.
+
+
+
+
+
+\end{document}
